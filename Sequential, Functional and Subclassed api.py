@@ -1,18 +1,35 @@
 import tensorflow as tf
-
+import matplotlib.pyplot as plt
 from tensorflow.keras import Input, Sequential, Model
 from tensorflow.keras.layers import Layer, Conv2D, MaxPooling2D, Dense, ZeroPadding2D, Flatten, InputLayer
 
+arch = "figures/CNN architecture.png"
+
+img = plt.imread(arch)
+plt.figure(figsize=(24, 20))
+plt.imshow(img)
+plt.axis('off')
+plt.show()
+
 """
 There are three ways to create models in TensorFlow / Keras:
-1. The Sequential model, which is very straightforward
-(a simple list of layers), but is limited to single-input,
-single-output stacks of layers (as the name gives away).
+1. The Sequential model
+2. Functional api
+3. Subclass api
 """
+
+"""
+1. THE SEQUENTIAL API
+Appropriate for a plain stack of layers where each layer has
+exactly one input tensor and one output tensor.
+You can create a Sequential model by passing a list of layers
+to the Sequential constructor.
+"""
+
 model = Sequential([
  Input(shape=(227, 227, 3), name="Input"),
- Conv2D(filters=96, kernel_size=11, strides=4, activation="relu"),
- MaxPooling2D(pool_size=3, strides=2),
+ Conv2D(filters=96, kernel_size=11, strides=4, activation="relu", name="first_conv"),
+ MaxPooling2D(pool_size=3, strides=2, name="first_max_pooling"),
  ZeroPadding2D(padding=2),
  Conv2D(filters=256, kernel_size=5, strides=1, activation="relu"),
  MaxPooling2D(pool_size=3, strides=2),
@@ -26,21 +43,46 @@ model = Sequential([
  Flatten(),
  Dense(4096, activation="relu"),
  Dense(4096, activation="relu"),
- Dense(1000, activation="softmax")
-], name="CNNmodel")
+ Dense(1000, activation="softmax")],
+ name="CNNmodel")
 
+
+# Once a model is "built", you can call its summary() method to display its contents
 model.summary()
 
-"""
-2. The Functional API, which is an easy-to-use, fully-featured API
- that supports arbitrary model architectures. For most people and
- most use cases, this is what you should be using. This is the Keras
- "industry strength" model.
 
- This API create models that are more flexible than the
- tf.keras.Sequential API. The functional API can handle
- models with non-linear topology, shared layers, and
- even multiple inputs or outputs.
+# You can also create a Sequential model incrementally via the add() method:
+model_ = Sequential()
+model_.add(Input(shape=(227, 227, 3)))
+model_.add(Conv2D(64, 2, 2))
+model_.add(MaxPooling2D(2, 2))
+model_.summary()
+
+
+"""
+2. FUNCTIONAL API
+For most people and most use cases, this is what you should be using.
+This is the Keras "industry strength" model.
+
+This API create models that are more flexible than the
+tf.keras.Sequential API. The functional API can handle
+models with non-linear topology, shared layers, and
+even multiple inputs or outputs.
+
+The main idea is that a deep learning model is usually a directed
+acyclic graph (DAG) of layers. So the functional API is a way to
+build graphs of layers.
+
+It assumes a model as a basic graph with layers. So to build the graph,
+you build the nodes, one after the other, while consider the layout
+of our graph
+
+For instance, in the model below, we start by creating the input
+node.
+Then, you create a new node in the graph of layers by calling a
+layer on this inputs object.
+With this in mind, more layers are added to the graph of layers until
+the graph is complete.
 """
 
 inputs = Input(shape=(227, 227, 3))
@@ -61,14 +103,18 @@ x = Dense(4096)(x)
 x = Dense(4096)(x)
 outputs = Dense(1000)(x)
 
-model_ = Model(inputs=inputs, outputs=outputs, name="CNNmodel")
+# At this point, you can create a Model by specifying its inputs and
+# outputs in the graph of layers
+model_functional = Model(inputs=inputs, outputs=outputs, name="CNNmodel")
 
-model_.summary()
+model_functional.summary()
 
+assert model_functional.count_params() == model.count_params()
 
 """
-3. Model subclassing is where you implement everything from scratch on
- your own. Use this if you have complex, out-of-the-box research use cases.
+3. SUBCLASS API
+Where you implement everything from scratch on your own.
+Use this if you have complex, out-of-the-box research use cases.
 """
 
 class triBlockArchitecture(tf.keras.layers.Layer):
@@ -108,7 +154,7 @@ class Linear(tf.keras.layers.Layer):
         return tf.matmul(inputs, self.w) + self.b
 
 class CnnModel(tf.keras.Model):
-    def __init__(self, in_shape, output_classes):
+    def __init__(self, output_classes):
         super(CnnModel, self).__init__()
         self.layer1 = triBlockArchitecture([False, True, True], f=96, k=11, s=4)
         self.layer2 = triBlockArchitecture(f=256, k=5, p=2, s=1)
@@ -117,7 +163,7 @@ class CnnModel(tf.keras.Model):
         self.layer4 = triBlockArchitecture(f=256, k=3, s=1)
         self.linear = Linear(units=4096)
         self.linear_1 = Linear(units=4096)
-        self.classifier = Linear(units=1000)
+        self.classifier = Linear(units=output_classes)
         self.flatten = Flatten()
 
     def call(self, inputs):
@@ -131,9 +177,9 @@ class CnnModel(tf.keras.Model):
         x = self.linear_1(x)
         return self.classifier(x)
 
-    def model(self):
-        x = Input(shape=(227, 227, 3))
-        return Model(inputs=[x], outputs=self.call(x))
+    # def model(self):
+    #     x = Input(shape=(227, 227, 3))
+    #     return Model(inputs=[x], outputs=self.call(x))
 
-model_sub = CnnModel((227, 227, 3), 196)
-model_sub.model().summary()
+model_sub = CnnModel(1000)
+# model_sub.model().summary()

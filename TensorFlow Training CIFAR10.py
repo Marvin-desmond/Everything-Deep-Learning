@@ -15,16 +15,16 @@ print("Test samples: {}".format(x_test.shape[0]))
 preprocessing = tf.keras.layers.experimental.preprocessing
 # norm_layer.adapt(x_train[0])
 
-import numpy as np 
+import numpy as np
 mean = np.array([127.5] * 3)
 norm_im = x_train[0]
 norm_im = norm_layer(x_train[0])
 norm_im = norm_im.numpy()
-norm_im[:, :, 0].mean(), norm_im[:, :, 0].std() 
-norm_im[:, :, 1].mean(), norm_im[:, :, 1].std() 
-norm_im[:, :, 2].mean(), norm_im[:, :, 2].std() 
+norm_im[:, :, 0].mean(), norm_im[:, :, 0].std()
+norm_im[:, :, 1].mean(), norm_im[:, :, 1].std()
+norm_im[:, :, 2].mean(), norm_im[:, :, 2].std()
 
-norm_im[:, :, 2].min(), norm_im[:, :, 2].max() 
+norm_im[:, :, 2].min(), norm_im[:, :, 2].max()
 
 
 # Option 1 : Using dataset in numpy format
@@ -67,9 +67,9 @@ tf.data.experimental.cardinality(train_dataset)
 def create_dataset(data, labels, batch_size):
     def gen():
         for image, label in zip(data, labels):
-            yield image, label 
+            yield image, label
     # ds = tf.data.Dataset.from_generator(gen, (tf.float32, tf.int32), ((32, 32, 3), (1,)))
-    ds = tf.data.Dataset.from_generator(gen, 
+    ds = tf.data.Dataset.from_generator(gen,
     output_signature=(
         tf.TensorSpec(shape=(32, 32, 3), dtype=tf.float32),
         tf.TensorSpec(shape=(1,), dtype=tf.int32)))
@@ -78,7 +78,7 @@ def create_dataset(data, labels, batch_size):
 train_gen_data = create_dataset(x_test, y_test, 32)
 
 
-model_ = tf.keras.Sequential([ 
+model_ = tf.keras.Sequential([
     scaling,
     model,
 ])
