@@ -87,3 +87,36 @@ def GoogleNetAux():
     plt.xticks([])
     plt.yticks([])
     plt.show()
+
+def PlainVsRes():
+    plt.figure(figsize=(45, 15))
+    img = plt.imread("figures/PlainvsResidual.png")
+    img = cv2.rotate(img, cv2.cv2.ROTATE_90_COUNTERCLOCKWISE)
+    plt.imshow(img)
+    plt.xticks([])
+    plt.yticks([])
+    plt.show()
+
+def ResidualBlock():
+    plt.figure(figsize=(12, 8))
+    img = plt.imread("figures/Residual_blocks.png")
+    plt.imshow(img)
+    plt.xticks([])
+    plt.yticks([])
+    plt.show()
+
+def ResTypes():
+    plt.figure(figsize=(13, 10))
+    img = plt.imread("figures/ResNetsLayers.png")
+    plt.imshow(img)
+    plt.xticks([])
+    plt.yticks([])
+    plt.show()
+
+def NOfP():
+    plt.figure(figsize=(10, 8))
+    img = plt.imread("figures/NumberOfParameters.png")
+    plt.imshow(img)
+    plt.xticks([])
+    plt.yticks([])
+    plt.show()
