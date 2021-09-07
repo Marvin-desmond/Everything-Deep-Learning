@@ -2,3 +2,5 @@
 __pycache__
 Perceptron and MLP.py
 ResNet_archive.py
+EfficientNet.py
+ShuffleNet.py

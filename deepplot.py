@@ -120,3 +120,75 @@ def NOfP():
     plt.xticks([])
     plt.yticks([])
     plt.show()
+
+def ResNextVar():
+    plt.figure(figsize=(30, 15))
+    img = plt.imread('figures/ResNextVariants.png')
+    plt.imshow(img)
+    plt.xticks([])
+    plt.yticks([])
+    plt.show()
+
+def ResNextArch():
+    plt.figure(figsize=(13, 10))
+    img = plt.imread('figures/ResNextArchitecture.jpg')
+    plt.imshow(img)
+    plt.xticks([])
+    plt.yticks([])
+    plt.show()
+
+def InvertedResidual():
+    plt.figure(figsize=(10, 8))
+    img = plt.imread('figures/InvertedResidual.jpg')
+    plt.imshow(img)
+    plt.xticks([])
+    plt.yticks([])
+    plt.show()
+
+def LBottleNeck():
+    plt.figure(figsize=(8, 8))
+    img = plt.imread('figures/MobilenetBlock.jpg')
+    plt.imshow(img)
+    plt.xticks([])
+    plt.yticks([])
+    plt.show()
+
+def MBnetArch():
+    plt.figure(figsize=(12, 10))
+    img = plt.imread('figures/MobilenetArch.jpg')
+    plt.imshow(img)
+    plt.xticks([])
+    plt.yticks([])
+    plt.show()
+
+def Densenetview():
+    plt.figure(figsize=(20, 15))
+    img = plt.imread('figures/DenseNetOverview2.jpg')
+    plt.imshow(img)
+    plt.xticks([])
+    plt.yticks([])
+    plt.show()
+
+def Densenetarch():
+    plt.figure(figsize=(16, 16))
+    img = plt.imread('figures/DenseNetArch.jpg')
+    plt.imshow(img)
+    plt.xticks([])
+    plt.yticks([])
+    plt.show()
+
+def Densenetarch():
+    plt.figure(figsize=(16, 16))
+    img = plt.imread('figures/DenseNetArch.jpg')
+    plt.imshow(img)
+    plt.xticks([])
+    plt.yticks([])
+    plt.show()
+
+def Densenetarch2():
+    plt.figure(figsize=(15, 5))
+    img = plt.imread('figures/DenseNetArch2.jpg')
+    plt.imshow(img)
+    plt.xticks([])
+    plt.yticks([])
+    plt.show()
